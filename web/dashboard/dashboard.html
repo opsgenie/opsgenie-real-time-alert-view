@@ -1,0 +1,23 @@
+<div class="left-side">
+    <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted"
+         ng-click="alert.ui_deleted = true;">
+        <div class="alert bg-default" ng-class="alert.ui_bg_class">
+            <span class="tinyId">{{alert.tinyId}}</span>
+            <span class="createdAt">{{Math.floor(alert.createdAt / 1000000) | date: 'medium'}}</span>
+            <span class="message">{{alert.message}}</span>
+            <span class="tag" ng-if="alert.tags.length > 0">{{alert.tags[alert.tagIndex]}}</span>
+            <span class="owner">{{getOwnerFullName(alert)}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="right-side">
+    <div class="notifications">
+        <div class="notification action-{{notification.action}}"
+             ng-repeat="notification in notifications | orderBy:'$index'">
+            <div ng-include="notification.templateUrl"></div>
+            <div class="notification-date">{{Math.floor(notification.alert.updatedAt / 1000000) | date: 'medium'}}</div>
+        </div>
+    </div>
+    <div class="opsgenie-logo"></div>
+</div>

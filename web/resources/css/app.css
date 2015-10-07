@@ -1,0 +1,162 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+body .bold {
+    font-weight: bold;
+}
+
+body .left-side,
+body .right-side {
+    height: 100vh;
+    float: left;
+}
+
+body .left-side {
+    width: 75vw;
+}
+
+body .left-side .alertContainer {
+    width: 25%;
+    height: 25%;
+    float: left;
+}
+
+body .left-side .alertContainer .alert {
+    margin: 1%;
+    width: 98%;
+    height: 98%;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    position: relative;
+}
+
+body .left-side .alertContainer .alert .tinyId {
+    background-color: #F9F9F9;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #2E2E2E;
+    position: absolute;
+    top: 1vh;
+    left: 1vh;
+    font-size: 2vh;
+    padding: 0.3vh;
+}
+
+body .left-side .alertContainer .alert .createdAt {
+    color: #F0FFFF;
+    position: absolute;
+    top: 0.6vh;
+    right: 1vh;
+    font-size: 2vh;
+}
+
+body .left-side .alertContainer .alert .message {
+    width: 100%;
+    color: #F0FFFF;
+    position: absolute;
+    top: 5vh;
+    bottom: 5vh;
+    font-size: 2.5vh;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+body .left-side .alertContainer .alert .tag {
+    background-color: indianred;
+    color: aliceblue;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 1vh;
+    left: 1vh;
+    font-size: 2vh;
+    padding: 0.3vh;
+}
+
+body .left-side .alertContainer .alert .owner {
+    background-color: yellowgreen;
+    color: aliceblue;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 1vh;
+    right: 1vh;
+    font-size: 2vh;
+    padding: 0.3vh;
+}
+
+body .left-side .alertContainer .alert.bg-default {
+    background-color: #757E93;
+    transition: background-color 0.6s ease;
+}
+
+body .left-side .alertContainer .alert.bg-default.bg-red {
+    background-color: indianred;
+}
+
+body .right-side {
+    width: 25vw;
+    background-color: #3F4C6B;
+    position: relative;
+}
+
+body .right-side .notifications {
+    width: 100%;
+    height: 93vh;
+    position: absolute;
+    top: 0;
+}
+
+body .right-side .notifications .notification {
+    background-color: #9BA1B0;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    margin: 1vh;
+    padding: 1.2vh;
+}
+
+body .right-side .notifications .notification .notification-date {
+    text-align: right;
+    font-size: 1.8vh;
+}
+
+body .right-side .notifications .notification .note {
+    font-size: 2vh;
+    font-style: italic;
+    margin: 2vh 0;
+}
+
+body .right-side .notifications .notification .message {
+    font-size: 2vh;
+    margin: 2vh 0;
+}
+
+body .right-side .opsgenie-logo {
+    width: 100%;
+    height: 6vh;
+    position: absolute;
+    bottom: 0;
+    background-image: url("../images/opsgenie-logo.png");
+    background-repeat: no-repeat;
+    background-position: right 1vh bottom 1vh;
+    background-size: auto 5vh;
+}

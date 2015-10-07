@@ -1,0 +1,16 @@
+{
+  "name": "opsgenie-real-time-alert-view",
+  "description": "Demo of a Real Time Alert Dashboard by tracking OpsGenie alert api & webhook",
+  "version": "0.0.1",
+  "homepage": "https://github.com/opsgenie/opsgenie-real-time-alert-view",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-route": "~1.4.0",
+    "angular-loader": "~1.4.0",
+    "angular-mocks": "~1.4.0",
+    "angular-bootstrap": "~0.13.4",
+    "pubnub-angular": "~1.1.0"
+  }
+}
