@@ -1,0 +1,14 @@
+{
+  "name": "opsgeniewebhook",
+  "version": "1.0.0",
+  "description": "Publish an event comes from OpsGenie Webhook integration over a PubNub Channel",
+  "main": "index.js",
+  "dependencies": {
+    "pubnub": "^3.7.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+  },
+  "author": "Kaan Basal",
+  "license": "ISC"
+}
