@@ -58,6 +58,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
     $scope.loadUsers = function () {
         var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.users.operation,
             apiKey: $scope.params.api.key
         };
 
@@ -67,7 +68,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             headers: {
                 "Content-Type": "application/json"
             },
-            url: $scope.params.api.urls.users.url,
+            url: $scope.params.api.url,
             data: dataObj
         });
 
@@ -88,8 +89,10 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
     $scope.loadAlerts = function () {
         var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.alerts.operation,
             apiKey: $scope.params.api.key,
-            limit: $scope.params.api.urls.alerts.limit
+            status: $scope.params.api.lambda_operations.alerts.status,
+            limit: $scope.params.api.lambda_operations.alerts.limit
         };
 
         var res = $http({
@@ -98,7 +101,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             headers: {
                 "Content-Type": "application/json"
             },
-            url: $scope.params.api.urls.alerts.url,
+            url: $scope.params.api.url,
             data: dataObj
         });
 
