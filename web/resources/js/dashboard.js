@@ -42,6 +42,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                 return;
             }
 
+            console.log(payload.message); // TODO delete
+
             if (payload.message.action == "Create") {
                 $scope.createAlert(payload.message.alert, payload.message);
             } else if (payload.message.action == "Acknowledge") {
@@ -158,21 +160,25 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         if (alert.tinyId in $scope.alertsDict) {
             angular.forEach($scope.alerts, function (existingAlert, index) {
                 if (existingAlert.tinyId == alert.tinyId) {
-                    $scope.alerts[index] = alert;
+                    alert = angular.merge(existingAlert, alert);
                 }
             });
         } else {
             $scope.alerts.push(alert);
+            $scope.alertsDict[alert.tinyId] = alert;
         }
-        $scope.alertsDict[alert.tinyId] = alert;
+
+        return alert;
     };
 
     $scope.updateWebHookAlertsDataWithFixes = function (alert) {
-        $scope.updateAlertsData(alert);
+        alert = $scope.updateAlertsData(alert);
 
         if ("createdAt" in alert) {
             alert.createdAt *= 1000000; // TODO WebHook createdAt fix
         }
+
+        return alert;
     };
 
     $scope.createAlert = function (alert, notification) {
@@ -192,11 +198,10 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.acknowledgeAlert = function (notification) {
+        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+
         var alert = notification.alert;
-
-        $scope.updateWebHookAlertsDataWithFixes(alert);
-
-        if (!("owner" in alert)) {
+        if (!("owner" in alert) || alert.owner.length == 0) {
             alert.owner = alert.username; // TODO WebHook owner fix
         }
 
@@ -204,7 +209,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.addNote = function (notification) {
-        $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
         $scope.addNotification(notification);
     };
 
@@ -226,16 +231,14 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.closeAlertFinally = function (notification, existingAlert) {
-        var alert = notification.alert;
-
         if (angular.isDefined(existingAlert)) {
             $interval.cancel(existingAlert.ui_bg_class_interval);
         }
 
-        $scope.updateWebHookAlertsDataWithFixes(alert);
+        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
         $scope.addNotification(notification);
 
-        alert.ui_deleted = true;
+        notification.alert.ui_deleted = true;
     };
 
     $scope.init();

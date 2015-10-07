@@ -5,7 +5,7 @@
             <span class="createdAt">{{Math.floor(alert.createdAt / 1000000) | date: 'medium'}}</span>
             <span class="message">{{alert.message}}</span>
             <span class="tag" ng-if="alert.tags.length > 0">{{alert.tags[alert.tagIndex]}}</span>
-            <span class="owner">{{getOwnerFullName(alert)}}</span>
+            <span class="owner" ng-if="alert.owner">{{getOwnerFullName(alert)}}</span>
         </div>
     </div>
 </div>
