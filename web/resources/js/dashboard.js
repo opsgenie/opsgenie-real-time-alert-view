@@ -223,6 +223,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
         if (angular.isDefined(notification)) {
             $scope.addNotification(notification);
+            $scope.loadAlertCounts();
         }
     };
 
@@ -235,6 +236,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         }
 
         $scope.addNotification(notification);
+        $scope.loadAlertCounts();
     };
 
     $scope.addNote = function (notification) {
@@ -268,6 +270,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         $scope.addNotification(notification);
 
         notification.alert.ui_deleted = true;
+
+        $scope.loadAlertCounts();
     };
 
     $scope.init();
