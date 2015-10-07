@@ -1,6 +1,5 @@
 <div class="left-side">
-    <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted"
-         ng-click="alert.ui_deleted = true;">
+    <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted">
         <div class="alert bg-default" ng-class="alert.ui_bg_class">
             <span class="tinyId">{{alert.tinyId}}</span>
             <span class="createdAt">{{Math.floor(alert.createdAt / 1000000) | date: 'medium'}}</span>
