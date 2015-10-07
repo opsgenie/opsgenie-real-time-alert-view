@@ -1,11 +1,11 @@
 <div class="left-side">
     <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted">
         <div class="alert bg-default" ng-class="alert.ui_bg_class">
-            <span class="tinyId">{{alert.tinyId}}</span>
-            <span class="createdAt">{{Math.floor(alert.createdAt / 1000000) | date: 'medium'}}</span>
+            <span class="tinyId bold">{{alert.tinyId}}</span>
+            <span class="createdAt bold">{{alert.createdAt | date: "M/d/yy"}}<br>{{alert.createdAt | date: "HH:mm"}}</span>
             <span class="message">{{alert.message}}</span>
             <span class="tag" ng-if="alert.tags.length > 0">{{alert.tags[alert.tagIndex]}}</span>
-            <span class="owner" ng-if="alert.owner">{{getOwnerFullName(alert)}}</span>
+            <span class="owner bold" ng-if="alert.owner">{{getOwnerFullName(alert)}}</span>
         </div>
     </div>
 </div>
@@ -15,7 +15,7 @@
         <div class="notification action-{{notification.action}}"
              ng-repeat="notification in notifications | orderBy:'$index'">
             <div ng-include="notification.templateUrl"></div>
-            <div class="notification-date">{{Math.floor(notification.alert.updatedAt / 1000000) | date: 'medium'}}</div>
+            <div class="notification-date">{{notification.alert.updatedAt | date: "M/d/yy HH:mm"}}</div>
         </div>
     </div>
     <div class="opsgenie-logo"></div>

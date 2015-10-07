@@ -147,6 +147,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         notification.templateUrl = 'dashboard/notification/' + notification.action + '.html';
         $scope.notifications.unshift(notification);
 
+        notification.alert.updatedAt = Math.floor(notification.alert.updatedAt / 1000000); // TODO WebHook createdAt fix
+
         if ($scope.notifications.length > $scope.params.ui.notificationsLimit) {
             $scope.notifications.pop();
         }
@@ -167,34 +169,25 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         return alert;
     };
 
-    $scope.updateWebHookAlertsDataWithFixes = function (alert) {
-        alert = $scope.updateAlertsData(alert);
-
-        if ("createdAt" in alert) {
-            alert.createdAt *= 1000000; // TODO WebHook createdAt fix
-        }
-
-        return alert;
-    };
-
     $scope.createAlert = function (alert, notification) {
         alert.ui_deleted = false;
         alert.ui_bg_class = "";
         alert.tagIndex = 0;
 
-        if (angular.isDefined(notification)) {
-            if (angular.isDefined(alert.insertedAt)) {
-                alert.createdAt = alert.insertedAt; // TODO WebHook createdAt fix
-            }
-
-            $scope.addNotification(notification);
+        if (angular.isUndefined(notification)) {
+            alert.createdAt = Math.floor(alert.createdAt / 1000000); // TODO WebHook createdAt fix
+            alert.updatedAt = Math.floor(alert.updatedAt / 1000000); // TODO WebHook createdAt fix
         }
 
         $scope.updateAlertsData(alert);
+
+        if (angular.isDefined(notification)) {
+            $scope.addNotification(notification);
+        }
     };
 
     $scope.acknowledgeAlert = function (notification) {
-        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+        notification.alert = $scope.updateAlertsData(notification.alert);
 
         var alert = notification.alert;
         if (!("owner" in alert) || alert.owner.length == 0) {
@@ -205,7 +198,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.addNote = function (notification) {
-        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+        notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
     };
 
@@ -231,7 +224,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             $interval.cancel(existingAlert.ui_bg_class_interval);
         }
 
-        notification.alert = $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+        notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
 
         notification.alert.ui_deleted = true;
