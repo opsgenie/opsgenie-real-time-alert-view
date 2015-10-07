@@ -25,6 +25,11 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     $scope.alertsDict = {};
     $scope.notifications = [];
     $scope.users = {};
+    $scope.alertStatusArr = ["open", "unacked"];
+    $scope.alertCounts = {
+        initialized: false,
+        statusDict: {}
+    };
 
     $scope.PubNubInit = function () {
         PubNub.init({
@@ -56,12 +61,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         });
     };
 
-    $scope.loadUsers = function () {
-        var dataObj = {
-            lambdaOperation: $scope.params.api.lambda_operations.users.operation,
-            apiKey: $scope.params.api.key
-        };
-
+    $scope.makeApiRequest = function (dataObj) {
         var res = $http({
             method: 'OPTIONS',
             dataType: "json",
@@ -72,6 +72,21 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             data: dataObj
         });
 
+        res.error(function (data, status, headers, config) {
+            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
+        });
+
+        return res;
+    };
+
+    $scope.loadUsers = function () {
+        var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.users.operation,
+            apiKey: $scope.params.api.key
+        };
+
+        var res = $scope.makeApiRequest(dataObj);
+
         res.success(function (data, status, headers, config) {
             if (angular.isDefined(data.users)) {
                 angular.forEach(data.users, function (user, index) {
@@ -80,10 +95,6 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             } else {
                 $scope.users = {};
             }
-        });
-
-        res.error(function (data, status, headers, config) {
-            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
         });
     };
 
@@ -95,15 +106,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             limit: $scope.params.api.lambda_operations.alerts.limit
         };
 
-        var res = $http({
-            method: 'OPTIONS',
-            dataType: "json",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            url: $scope.params.api.url,
-            data: dataObj
-        });
+        var res = $scope.makeApiRequest(dataObj);
 
         res.success(function (data, status, headers, config) {
             if (angular.isDefined(data.alerts)) {
@@ -115,9 +118,42 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                 $scope.alertsDict = {};
             }
         });
+    };
 
-        res.error(function (data, status, headers, config) {
-            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
+    $scope.loadAlertCount = function (alertStatus) {
+        var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.counts.operation,
+            apiKey: $scope.params.api.key,
+            status: alertStatus
+        };
+
+        var res = $scope.makeApiRequest(dataObj);
+
+        res.success(function (data, status, headers, config) {
+            if (angular.isDefined(data.count)) {
+                $scope.alertCounts.statusDict[alertStatus] = data.count;
+
+                var initialized = true;
+                angular.forEach($scope.alertStatusArr, function (alertStatus, index) {
+                    if (!(alertStatus in $scope.alertCounts.statusDict)) {
+                        initialized = false;
+                    }
+                });
+                $scope.alertCounts.initialized = initialized;
+                console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.initialized);
+                if ($scope.alertCounts.initialized) {
+                    console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.statusDict.unacked + " / " + $scope.alertCounts.statusDict.open);
+                }
+            }
+        });
+    };
+
+    $scope.loadAlertCounts = function () {
+        $scope.alertCounts.initialized = false;
+        $scope.alertCounts.statusDict = {};
+
+        angular.forEach($scope.alertStatusArr, function (alertStatus, index) {
+            $scope.loadAlertCount(alertStatus);
         });
     };
 
@@ -125,6 +161,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         $scope.PubNubInit();
         $scope.loadUsers();
         $scope.loadAlerts();
+        $scope.loadAlertCounts();
 
         $interval($scope.updateTags, $scope.params.ui.tagsUpdateInterval);
     };

@@ -118,11 +118,37 @@ body {
     background-color: #3F4C6B;
     position: relative;
 
-    .notifications {
+    .counts {
       width: 100%;
-      height: 93vh;
+      height: 6vh;
       position: absolute;
       top: 0;
+      background-color: #323C55;
+      color: white;
+
+      .count {
+        font-size: 5vmin;
+        line-height: 5vmin;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        top: 0.5vmin;
+      }
+
+      .desc {
+        font-size: 2vmin;
+        line-height: 2vmin;
+        position: absolute;
+        bottom: 0.4vmin;
+        right: 0.4vmin;
+      }
+    }
+
+    .notifications {
+      width: 100%;
+      height: 86vh;
+      position: absolute;
+      top: 6vh;
 
       .notification {
         background-color: #9BA1B0;

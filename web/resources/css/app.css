@@ -105,11 +105,34 @@ body .right-side {
   background-color: #3F4C6B;
   position: relative;
 }
-body .right-side .notifications {
+body .right-side .counts {
   width: 100%;
-  height: 93vh;
+  height: 6vh;
   position: absolute;
   top: 0;
+  background-color: #323C55;
+  color: white;
+}
+body .right-side .counts .count {
+  font-size: 5vmin;
+  line-height: 5vmin;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 0.5vmin;
+}
+body .right-side .counts .desc {
+  font-size: 2vmin;
+  line-height: 2vmin;
+  position: absolute;
+  bottom: 0.4vmin;
+  right: 0.4vmin;
+}
+body .right-side .notifications {
+  width: 100%;
+  height: 86vh;
+  position: absolute;
+  top: 6vh;
 }
 body .right-side .notifications .notification {
   background-color: #9BA1B0;

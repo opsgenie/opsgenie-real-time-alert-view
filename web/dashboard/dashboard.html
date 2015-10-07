@@ -11,6 +11,10 @@
 </div>
 
 <div class="right-side">
+    <div class="counts" ng-if="alertCounts.initialized">
+        <div class="count">{{alertCounts.statusDict.unacked}} / {{alertCounts.statusDict.open}}</div>
+        <span class="desc">Unacked / Open</span>
+    </div>
     <div class="notifications">
         <div class="notification action-{{notification.action}}"
              ng-repeat="notification in notifications | orderBy:'$index'">
