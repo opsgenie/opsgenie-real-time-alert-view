@@ -143,10 +143,6 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         return $scope.getFullName(alert.owner);
     };
 
-    $scope.getAckedUserFullName = function (alert) {
-        return $scope.getFullName(alert.username);
-    };
-
     $scope.addNotification = function (notification) {
         notification.templateUrl = 'dashboard/notification/' + notification.action + '.html';
         $scope.notifications.unshift(notification);
