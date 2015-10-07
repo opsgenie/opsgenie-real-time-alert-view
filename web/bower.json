@@ -11,6 +11,7 @@
     "angular-loader": "~1.4.0",
     "angular-mocks": "~1.4.0",
     "angular-bootstrap": "~0.13.4",
+    "pubnub": "~3.7.14",
     "pubnub-angular": "~1.1.0"
   }
 }
