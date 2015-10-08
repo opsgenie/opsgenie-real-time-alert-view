@@ -67,8 +67,8 @@ Lambda Function contains pure Node.js code and requires PubNub javascript librar
 * On the Api endpoints tab, add API endpoint with { API endpoint type: API Gateway, Method: POST, Security: Open } parameters and submit.
 	* To receive notifications from OpsGenie, add OpsGenie Webhook Integration on OpsGenie integrations page and fill URL parameter with Api endpoint URL.
 
-
-Web project contains pure HTML/JavaScript code. Deploy all **web** folder content to your favorite HTTP Server.
+## Deploying Web Project
+* Web project contains pure HTML/JavaScript code. Deploy all **web** folder content to your favorite HTTP Server.
 
 ## Browser Compatibility
 
