@@ -140,10 +140,6 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                     }
                 });
                 $scope.alertCounts.initialized = initialized;
-                console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.initialized);
-                if ($scope.alertCounts.initialized) {
-                    console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.statusDict.unacked + " / " + $scope.alertCounts.statusDict.open);
-                }
             }
         });
     };
@@ -181,6 +177,36 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
     $scope.getOwnerFullName = function (alert) {
         return $scope.getFullName(alert.owner);
+    };
+
+    $scope.toggleAlertBg = function (alert, className) {
+        alert.ui_bg_class = alert.ui_bg_class == "" ? className : "";
+    };
+
+    $scope.flashAlert = function (alert, className, interval, timeoutInterval, timeoutFunc) {
+        alert.ui_bg_class_interval = $interval($scope.toggleAlertBg, interval, 0, true, alert, className);
+
+        var args = [$scope.flashAlertTimeout, timeoutInterval, true, alert, timeoutFunc];
+
+        if (angular.isDefined(timeoutFunc)) {
+            // use splice to get all the arguments after 'timeoutFunc'
+            var timeoutArgs = Array.prototype.splice.call(arguments, 5);
+
+            args = args.concat(timeoutArgs);
+        }
+
+        $timeout.apply(null, args);
+    };
+
+    $scope.flashAlertTimeout = function (alert, timeoutFunc) {
+        $interval.cancel(alert.ui_bg_class_interval);
+
+        if (angular.isDefined(timeoutFunc)) {
+            // use splice to get all the arguments after 'timeoutFunc'
+            var timeoutArgs = Array.prototype.splice.call(arguments, 2);
+
+            timeoutFunc.apply(null, timeoutArgs);
+        }
     };
 
     $scope.addNotification = function (notification) {
@@ -250,22 +276,13 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         if (alert.tinyId in $scope.alertsDict) {
             var existingAlert = $scope.alertsDict[alert.tinyId];
 
-            existingAlert.ui_bg_class_interval = $interval($scope.toggleAlertBg, 800, 0, true, existingAlert, "bg-red");
-            $timeout($scope.closeAlertFinally, 4000, true, notification, existingAlert);
+            $scope.flashAlert(existingAlert, "bg-red", 800, 4000, $scope.closeAlertFinally, notification);
         } else {
             $scope.closeAlertFinally(notification);
         }
     };
 
-    $scope.toggleAlertBg = function (alert, className) {
-        alert.ui_bg_class = alert.ui_bg_class == "" ? className : "";
-    };
-
-    $scope.closeAlertFinally = function (notification, existingAlert) {
-        if (angular.isDefined(existingAlert)) {
-            $interval.cancel(existingAlert.ui_bg_class_interval);
-        }
-
+    $scope.closeAlertFinally = function (notification) {
         notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
 
