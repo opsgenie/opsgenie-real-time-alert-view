@@ -37,8 +37,8 @@ Web project contains pure HTML/JavaScript code. Deploy all **web** folder conten
 
 ## Browser Compatibility
 
-Chrome 5+
-Internet Explorer 9+
-Firefox 29+
-Safari 5.1+
-Opera 10.5+
+* Chrome 5+
+* Internet Explorer 9+
+* Firefox 29+
+* Safari 5.1+
+* Opera 10.5+
