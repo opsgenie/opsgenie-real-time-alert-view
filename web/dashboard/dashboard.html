@@ -19,7 +19,7 @@
     </div>
     <div class="notifications">
         <div class="notification action-{{notification.action}}"
-             ng-repeat="notification in notifications | orderBy:'$index'">
+             ng-repeat="notification in notifications | orderBy:'$index'" ng-click="selectAlert(notification.alert)">
             <div ng-include="notification.templateUrl"></div>
             <div class="notification-date">{{notification.alert.updatedAt | date: "M/d/yy HH:mm"}}</div>
         </div>

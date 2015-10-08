@@ -110,6 +110,9 @@ body .left-side .alertContainer .alert.bg-default.bg-blue {
 body .left-side .alertContainer .alert.bg-default.bg-green {
   background-color: #9ACD32;
 }
+body .left-side .alertContainer .alert.bg-default.bg-white {
+  background-color: #F8F8FF;
+}
 body .right-side {
   width: 25vw;
   background-color: #3F4C6B;

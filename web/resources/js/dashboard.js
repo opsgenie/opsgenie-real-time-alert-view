@@ -184,9 +184,13 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.flashAlert = function (alert, className, interval, timeoutInterval, timeoutFunc) {
-        alert.ui_bg_class_interval = $interval($scope.toggleAlertBg, interval, 0, true, alert, className);
+        var isAlertFlashing = alert.ui_is_flashing;
+        if (!isAlertFlashing) {
+            alert.ui_is_flashing = true;
+            alert.ui_bg_class_interval = $interval($scope.toggleAlertBg, interval, 0, true, alert, className);
+        }
 
-        var args = [$scope.flashAlertTimeout, timeoutInterval, true, alert, timeoutFunc];
+        var args = [$scope.flashAlertTimeout, !isAlertFlashing ? timeoutInterval : 0, true, alert, timeoutFunc];
 
         if (angular.isDefined(timeoutFunc)) {
             // use splice to get all the arguments after 'timeoutFunc'
@@ -201,6 +205,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     $scope.flashAlertTimeout = function (alert, timeoutFunc) {
         $interval.cancel(alert.ui_bg_class_interval);
         alert.ui_bg_class = "";
+        alert.ui_is_flashing = false;
 
         if (angular.isDefined(timeoutFunc)) {
             // use splice to get all the arguments after 'timeoutFunc'
@@ -208,6 +213,10 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
             timeoutFunc.apply(null, timeoutArgs);
         }
+    };
+
+    $scope.selectAlert = function (alert) {
+        $scope.flashAlert(alert, "bg-white", 400, 700);
     };
 
     $scope.addNotification = function (notification) {
@@ -239,6 +248,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     $scope.createAlert = function (alert, notification) {
         alert.ui_deleted = false;
         alert.ui_bg_class = "";
+        alert.ui_is_flashing = false;
         alert.tagIndex = 0;
 
         if (angular.isUndefined(notification)) {
