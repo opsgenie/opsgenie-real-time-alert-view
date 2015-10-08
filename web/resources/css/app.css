@@ -82,7 +82,7 @@ body .left-side .alertContainer .alert .tag {
   padding: 0.3vmin;
 }
 body .left-side .alertContainer .alert .owner {
-  background-color: yellowgreen;
+  background-color: #9ACD32;
   color: aliceblue;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -99,6 +99,18 @@ body .left-side .alertContainer .alert.bg-default {
 }
 body .left-side .alertContainer .alert.bg-default.bg-red {
   background-color: indianred;
+}
+
+body .left-side .alertContainer .alert.bg-default.bg-yellow {
+  background-color: #FAFAD2;
+}
+
+body .left-side .alertContainer .alert.bg-default.bg-blue {
+  background-color: #9ACD32;
+}
+
+body .left-side .alertContainer .alert.bg-default.bg-green {
+  background-color: #87CEFA;
 }
 body .right-side {
   width: 25vw;
