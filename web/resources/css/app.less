@@ -51,31 +51,33 @@ body {
           .border-radius(4px);
           color: #2E2E2E;
           position: absolute;
-          top: 1vh;
-          left: 1vh;
-          font-size: 2vh;
-          padding: 0.3vh;
+          top: 1vmin;
+          left: 1vmin;
+          font-size: 2vmin;
+          padding: 0.3vmin;
         }
 
         .createdAt {
           color: #F0FFFF;
           position: absolute;
-          top: 0.6vh;
-          right: 1vh;
-          font-size: 2vh;
+          top: 0.4vmin;
+          right: 1vmin;
+          font-size: 2vmin;
+          text-align: right;
+          line-height: 2vmin;
         }
 
         .message {
           width: 100%;
           color: #F0FFFF;
           position: absolute;
-          top: 5vh;
-          bottom: 5vh;
-          font-size: 2.5vh;
+          top: 5vmin;
+          bottom: 5vmin;
+          font-size: 2.5vmin;
           overflow: hidden;
           text-overflow: ellipsis;
-          padding-left: 1vh;
-          padding-right: 1vh;
+          padding-left: 1vmin;
+          padding-right: 1vmin;
         }
 
         .tag {
@@ -83,10 +85,10 @@ body {
           color: aliceblue;
           .border-radius(4px);
           position: absolute;
-          bottom: 1vh;
-          left: 1vh;
-          font-size: 2vh;
-          padding: 0.3vh;
+          bottom: 1vmin;
+          left: 1vmin;
+          font-size: 2vmin;
+          padding: 0.3vmin;
         }
 
         .owner {
@@ -94,10 +96,10 @@ body {
           color: aliceblue;
           .border-radius(4px);
           position: absolute;
-          bottom: 1vh;
-          right: 1vh;
-          font-size: 2vh;
-          padding: 0.3vh;
+          bottom: 1vmin;
+          right: 1vmin;
+          font-size: 2vmin;
+          padding: 0.3vmin;
         }
       }
 
@@ -116,32 +118,60 @@ body {
     background-color: #3F4C6B;
     position: relative;
 
-    .notifications {
+    .counts {
       width: 100%;
-      height: 93vh;
+      height: 6vh;
       position: absolute;
       top: 0;
+      background-color: #323C55;
+      color: white;
+
+      .count {
+        font-size: 5vmin;
+        line-height: 5vmin;
+        text-align: left;
+        width: 100%;
+        position: absolute;
+        top: 0.5vmin;
+        left: 2vmin;
+      }
+
+      .desc {
+        font-size: 2vmin;
+        line-height: 2vmin;
+        position: absolute;
+        bottom: 0.4vmin;
+        right: 0.4vmin;
+      }
+    }
+
+    .notifications {
+      width: 100%;
+      height: 86vh;
+      position: absolute;
+      top: 6vh;
 
       .notification {
         background-color: #9BA1B0;
         .border-radius(6px);
-        margin: 1vh;
-        padding: 1.2vh;
+        margin: 1vmin;
+        padding: 1.2vmin;
+        font-size: 2.2vmin;
 
         .notification-date {
           text-align: right;
-          font-size: 1.8vh;
+          font-size: 1.8vmin;
         }
 
         .note {
-          font-size: 2vh;
+          font-size: 2vmin;
           font-style: italic;
-          margin: 2vh 0;
+          margin: 2vmin 0;
         }
 
         .message {
-          font-size: 2vh;
-          margin: 2vh 0;
+          font-size: 2vmin;
+          margin: 2vmin 0;
         }
       }
     }
@@ -154,7 +184,7 @@ body {
 
       background-image: url("../images/opsgenie-logo.png");
       background-repeat: no-repeat;
-      background-position: right 1vh bottom 1vh;
+      background-position: right 1vmin bottom 1vmin;
       background-size: auto 5vh;
     }
   }

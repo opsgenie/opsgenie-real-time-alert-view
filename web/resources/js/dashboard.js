@@ -25,6 +25,11 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     $scope.alertsDict = {};
     $scope.notifications = [];
     $scope.users = {};
+    $scope.alertStatusArr = ["open", "unacked"];
+    $scope.alertCounts = {
+        initialized: false,
+        statusDict: {}
+    };
 
     $scope.PubNubInit = function () {
         PubNub.init({
@@ -42,6 +47,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                 return;
             }
 
+            console.log(payload.message); // TODO delete
+
             if (payload.message.action == "Create") {
                 $scope.createAlert(payload.message.alert, payload.message);
             } else if (payload.message.action == "Acknowledge") {
@@ -54,20 +61,31 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         });
     };
 
-    $scope.loadUsers = function () {
-        var dataObj = {
-            apiKey: $scope.params.api.key
-        };
-
+    $scope.makeApiRequest = function (dataObj) {
         var res = $http({
             method: 'OPTIONS',
             dataType: "json",
             headers: {
                 "Content-Type": "application/json"
             },
-            url: $scope.params.api.urls.users.url,
+            url: $scope.params.api.url,
             data: dataObj
         });
+
+        res.error(function (data, status, headers, config) {
+            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
+        });
+
+        return res;
+    };
+
+    $scope.loadUsers = function () {
+        var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.users.operation,
+            apiKey: $scope.params.api.key
+        };
+
+        var res = $scope.makeApiRequest(dataObj);
 
         res.success(function (data, status, headers, config) {
             if (angular.isDefined(data.users)) {
@@ -78,27 +96,17 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                 $scope.users = {};
             }
         });
-
-        res.error(function (data, status, headers, config) {
-            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
-        });
     };
 
     $scope.loadAlerts = function () {
         var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.alerts.operation,
             apiKey: $scope.params.api.key,
-            limit: $scope.params.api.urls.alerts.limit
+            status: $scope.params.api.lambda_operations.alerts.status,
+            limit: $scope.params.api.lambda_operations.alerts.limit
         };
 
-        var res = $http({
-            method: 'OPTIONS',
-            dataType: "json",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            url: $scope.params.api.urls.alerts.url,
-            data: dataObj
-        });
+        var res = $scope.makeApiRequest(dataObj);
 
         res.success(function (data, status, headers, config) {
             if (angular.isDefined(data.alerts)) {
@@ -110,9 +118,42 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
                 $scope.alertsDict = {};
             }
         });
+    };
 
-        res.error(function (data, status, headers, config) {
-            console.log("failure message: " + JSON.stringify({data: data})); // TODO handle
+    $scope.loadAlertCount = function (alertStatus) {
+        var dataObj = {
+            lambdaOperation: $scope.params.api.lambda_operations.counts.operation,
+            apiKey: $scope.params.api.key,
+            status: alertStatus
+        };
+
+        var res = $scope.makeApiRequest(dataObj);
+
+        res.success(function (data, status, headers, config) {
+            if (angular.isDefined(data.count)) {
+                $scope.alertCounts.statusDict[alertStatus] = data.count;
+
+                var initialized = true;
+                angular.forEach($scope.alertStatusArr, function (alertStatus, index) {
+                    if (!(alertStatus in $scope.alertCounts.statusDict)) {
+                        initialized = false;
+                    }
+                });
+                $scope.alertCounts.initialized = initialized;
+                console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.initialized);
+                if ($scope.alertCounts.initialized) {
+                    console.log("$scope.alertCounts.initialized: " + $scope.alertCounts.statusDict.unacked + " / " + $scope.alertCounts.statusDict.open);
+                }
+            }
+        });
+    };
+
+    $scope.loadAlertCounts = function () {
+        $scope.alertCounts.initialized = false;
+        $scope.alertCounts.statusDict = {};
+
+        angular.forEach($scope.alertStatusArr, function (alertStatus, index) {
+            $scope.loadAlertCount(alertStatus);
         });
     };
 
@@ -120,6 +161,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         $scope.PubNubInit();
         $scope.loadUsers();
         $scope.loadAlerts();
+        $scope.loadAlertCounts();
 
         $interval($scope.updateTags, $scope.params.ui.tagsUpdateInterval);
     };
@@ -141,13 +183,11 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         return $scope.getFullName(alert.owner);
     };
 
-    $scope.getAckedUserFullName = function (alert) {
-        return $scope.getFullName(alert.username);
-    };
-
     $scope.addNotification = function (notification) {
         notification.templateUrl = 'dashboard/notification/' + notification.action + '.html';
         $scope.notifications.unshift(notification);
+
+        notification.alert.updatedAt = Math.floor(notification.alert.updatedAt / 1000000); // TODO WebHook createdAt fix
 
         if ($scope.notifications.length > $scope.params.ui.notificationsLimit) {
             $scope.notifications.pop();
@@ -158,21 +198,15 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         if (alert.tinyId in $scope.alertsDict) {
             angular.forEach($scope.alerts, function (existingAlert, index) {
                 if (existingAlert.tinyId == alert.tinyId) {
-                    $scope.alerts[index] = alert;
+                    alert = angular.merge(existingAlert, alert);
                 }
             });
         } else {
             $scope.alerts.push(alert);
+            $scope.alertsDict[alert.tinyId] = alert;
         }
-        $scope.alertsDict[alert.tinyId] = alert;
-    };
 
-    $scope.updateWebHookAlertsDataWithFixes = function (alert) {
-        $scope.updateAlertsData(alert);
-
-        if ("createdAt" in alert) {
-            alert.createdAt *= 1000000; // TODO WebHook createdAt fix
-        }
+        return alert;
     };
 
     $scope.createAlert = function (alert, notification) {
@@ -180,31 +214,33 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         alert.ui_bg_class = "";
         alert.tagIndex = 0;
 
-        if (angular.isDefined(notification)) {
-            if (angular.isDefined(alert.insertedAt)) {
-                alert.createdAt = alert.insertedAt; // TODO WebHook createdAt fix
-            }
-
-            $scope.addNotification(notification);
+        if (angular.isUndefined(notification)) {
+            alert.createdAt = Math.floor(alert.createdAt / 1000000); // TODO WebHook createdAt fix
+            alert.updatedAt = Math.floor(alert.updatedAt / 1000000); // TODO WebHook createdAt fix
         }
 
         $scope.updateAlertsData(alert);
+
+        if (angular.isDefined(notification)) {
+            $scope.addNotification(notification);
+            $scope.loadAlertCounts();
+        }
     };
 
     $scope.acknowledgeAlert = function (notification) {
+        notification.alert = $scope.updateAlertsData(notification.alert);
+
         var alert = notification.alert;
-
-        $scope.updateWebHookAlertsDataWithFixes(alert);
-
-        if (!("owner" in alert)) {
+        if (!("owner" in alert) || alert.owner.length == 0) {
             alert.owner = alert.username; // TODO WebHook owner fix
         }
 
         $scope.addNotification(notification);
+        $scope.loadAlertCounts();
     };
 
     $scope.addNote = function (notification) {
-        $scope.updateWebHookAlertsDataWithFixes(notification.alert);
+        notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
     };
 
@@ -226,16 +262,16 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
     };
 
     $scope.closeAlertFinally = function (notification, existingAlert) {
-        var alert = notification.alert;
-
         if (angular.isDefined(existingAlert)) {
             $interval.cancel(existingAlert.ui_bg_class_interval);
         }
 
-        $scope.updateWebHookAlertsDataWithFixes(alert);
+        notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
 
-        alert.ui_deleted = true;
+        notification.alert.ui_deleted = true;
+
+        $scope.loadAlertCounts();
     };
 
     $scope.init();

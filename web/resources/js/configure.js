@@ -6,13 +6,18 @@ app.run(['$rootScope', function ($rootScope) {
     $rootScope.params = {
         api: {
             key: "opsgenie-web-api-key",
-            urls: {
+            url: "aws-gateway-url",
+            lambda_operations: {
                 alerts: {
-                    url: "aws-gateway-url-for-alerts",
+                    operation: "Alerts",
+                    status: "open",
                     limit: 16
                 },
                 users: {
-                    url: "aws-gateway-url-for-users"
+                    operation: "Users"
+                },
+                counts: {
+                    operation: "Counts"
                 }
             }
         },
