@@ -10,6 +10,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background-color: #BBBFC9;
 }
 body .bold {
   font-weight: bold;
@@ -70,7 +71,7 @@ body .left-side .alertContainer .alert .message {
   padding-right: 1vmin;
 }
 body .left-side .alertContainer .alert .tag {
-  background-color: indianred;
+  background-color: #DB7093;
   color: aliceblue;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -98,19 +99,16 @@ body .left-side .alertContainer .alert.bg-default {
   transition: background-color 0.6s ease;
 }
 body .left-side .alertContainer .alert.bg-default.bg-red {
-  background-color: indianred;
+  background-color: #CD5C5C;
 }
-
 body .left-side .alertContainer .alert.bg-default.bg-yellow {
   background-color: #FAFAD2;
 }
-
 body .left-side .alertContainer .alert.bg-default.bg-blue {
-  background-color: #9ACD32;
-}
-
-body .left-side .alertContainer .alert.bg-default.bg-green {
   background-color: #87CEFA;
+}
+body .left-side .alertContainer .alert.bg-default.bg-green {
+  background-color: #9ACD32;
 }
 body .right-side {
   width: 25vw;
@@ -148,7 +146,7 @@ body .right-side .notifications {
   top: 6vh;
 }
 body .right-side .notifications .notification {
-  background-color: #9BA1B0;
+  background-color: #FFFFFF;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -168,6 +166,19 @@ body .right-side .notifications .notification .note {
 body .right-side .notifications .notification .message {
   font-size: 2vmin;
   margin: 2vmin 0;
+}
+body .right-side .notifications .notification.action-Acknowledge {
+  background-color: #9ACD32;
+}
+body .right-side .notifications .notification.action-AddNote {
+  background-color: #FAFAD2;
+}
+body .right-side .notifications .notification.action-Close,
+body .right-side .notifications .notification.action-Delete {
+  background-color: #CD5C5C;
+}
+body .right-side .notifications .notification.action-Create {
+  background-color: #87CEFA;
 }
 body .right-side .opsgenie-logo {
   width: 100%;

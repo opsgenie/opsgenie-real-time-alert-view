@@ -1,3 +1,9 @@
+@color-default: #757E93;
+@color-red: #CD5C5C;
+@color-yellow: #FAFAD2;
+@color-blue: #87CEFA;
+@color-green: #9ACD32;
+
 .box-sizing(@sizing: border-box) {
   -webkit-box-sizing: @sizing;
   -moz-box-sizing: @sizing;
@@ -21,6 +27,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background-color: #BBBFC9;
 
   .bold {
     font-weight: bold;
@@ -81,7 +88,7 @@ body {
         }
 
         .tag {
-          background-color: indianred;
+          background-color: #DB7093;
           color: aliceblue;
           .border-radius(4px);
           position: absolute;
@@ -92,7 +99,7 @@ body {
         }
 
         .owner {
-          background-color: #9ACD32;
+          background-color: @color-green;
           color: aliceblue;
           .border-radius(4px);
           position: absolute;
@@ -104,20 +111,20 @@ body {
       }
 
       .alert.bg-default {
-        background-color: #757E93;
+        background-color: @color-default;
         transition: background-color 0.6s ease;
       }
       .alert.bg-default.bg-red {
-        background-color: indianred;
+        background-color: @color-red;
       }
       .alert.bg-default.bg-yellow {
-        background-color: #FAFAD2;
+        background-color: @color-yellow;
       }
       .alert.bg-default.bg-blue {
-        background-color: #9ACD32;
+        background-color: @color-blue;
       }
       .alert.bg-default.bg-green {
-        background-color: #87CEFA;
+        background-color: @color-green;
       }
     }
   }
@@ -161,7 +168,7 @@ body {
       top: 6vh;
 
       .notification {
-        background-color: #9BA1B0;
+        background-color: #FFFFFF;
         .border-radius(6px);
         margin: 1vmin;
         padding: 1.2vmin;
@@ -182,6 +189,19 @@ body {
           font-size: 2vmin;
           margin: 2vmin 0;
         }
+      }
+
+      .notification.action-Acknowledge {
+        background-color: @color-green;
+      }
+      .notification.action-AddNote {
+        background-color: @color-yellow;
+      }
+      .notification.action-Close, .notification.action-Delete {
+        background-color: @color-red;
+      }
+      .notification.action-Create {
+        background-color: @color-blue;
       }
     }
 

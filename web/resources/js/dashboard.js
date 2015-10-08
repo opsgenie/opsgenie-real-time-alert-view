@@ -252,7 +252,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
             $scope.addNotification(notification);
             $scope.loadAlertCounts();
 
-            $scope.flashAlert(alert, "bg-green", 400, 3000);
+            $scope.flashAlert(alert, "bg-blue", 400, 3000);
         }
     };
 
@@ -267,7 +267,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         $scope.addNotification(notification);
         $scope.loadAlertCounts();
 
-        $scope.flashAlert(alert, "bg-blue", 400, 3000);
+        $scope.flashAlert(alert, "bg-green", 400, 3000);
     };
 
     $scope.addNote = function (notification) {
