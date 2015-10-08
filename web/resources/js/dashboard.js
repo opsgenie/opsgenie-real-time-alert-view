@@ -200,6 +200,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
     $scope.flashAlertTimeout = function (alert, timeoutFunc) {
         $interval.cancel(alert.ui_bg_class_interval);
+        alert.ui_bg_class = "";
 
         if (angular.isDefined(timeoutFunc)) {
             // use splice to get all the arguments after 'timeoutFunc'
@@ -250,6 +251,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         if (angular.isDefined(notification)) {
             $scope.addNotification(notification);
             $scope.loadAlertCounts();
+
+            $scope.flashAlert(alert, "bg-green", 400, 3000);
         }
     };
 
@@ -263,11 +266,15 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
         $scope.addNotification(notification);
         $scope.loadAlertCounts();
+
+        $scope.flashAlert(alert, "bg-blue", 400, 3000);
     };
 
     $scope.addNote = function (notification) {
         notification.alert = $scope.updateAlertsData(notification.alert);
         $scope.addNotification(notification);
+
+        $scope.flashAlert(notification.alert, "bg-yellow", 400, 3000);
     };
 
     $scope.closeAlert = function (notification) {
@@ -276,7 +283,7 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         if (alert.tinyId in $scope.alertsDict) {
             var existingAlert = $scope.alertsDict[alert.tinyId];
 
-            $scope.flashAlert(existingAlert, "bg-red", 800, 4000, $scope.closeAlertFinally, notification);
+            $scope.flashAlert(existingAlert, "bg-red", 400, 3000, $scope.closeAlertFinally, notification);
         } else {
             $scope.closeAlertFinally(notification);
         }
