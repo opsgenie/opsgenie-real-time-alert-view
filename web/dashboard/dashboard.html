@@ -1,5 +1,6 @@
 <div class="left-side">
-    <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted">
+    <div class="alertContainer" ng-repeat="alert in alerts | orderBy:'updatedAt':true" ng-if="!alert.ui_deleted"
+         ng-style="{'width':params.ui.grid.width, 'height':params.ui.grid.height}">
         <div class="alert bg-default" ng-class="alert.ui_bg_class">
             <span class="tinyId bold">{{alert.tinyId}}</span>
             <span class="createdAt bold">{{alert.createdAt | date: "M/d/yy"}}<br>{{alert.createdAt | date: "HH:mm"}}</span>

@@ -9,16 +9,25 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
     });
 }]);
 
-app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$interval', '$timeout', function ($rootScope, $scope, $http, PubNub, $interval, $timeout) {
+app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$interval', '$timeout', '$routeParams', function ($rootScope, $scope, $http, PubNub, $interval, $timeout, $routeParams) {
 
     $scope.params = {
         ui: {
             tagsUpdateInterval: 3000,
             noOwner: "No Owner",
-            notificationsLimit: 50
+            notificationsLimit: 50,
+            grid: {
+                row: parseInt($routeParams.row) || 4,
+                col: parseInt($routeParams.col) || 4,
+                width: "25%",
+                height: "25%"
+            }
         }
     };
     angular.extend($scope.params, $rootScope.params);
+
+    $scope.params.ui.grid.width = Math.floor(100 / $scope.params.ui.grid.col) + "%";
+    $scope.params.ui.grid.height = Math.floor(100 / $scope.params.ui.grid.row) + "%";
 
     $scope.Math = window.Math;
     $scope.alerts = [];
