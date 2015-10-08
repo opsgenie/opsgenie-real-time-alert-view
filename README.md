@@ -35,17 +35,9 @@ All required configuration options are listed under
 
 ```sh
 /web/resources/js/configure.js
-```
-
-```sh
 /lambda/index.js
 ```
 
-## Running project
-
-Lambda Function contains pure Node.js code and requires PubNub javascript library.
-
-## Configuring Project
 * Create PubNub account, and create application on the PubNub Dashboard.
 * Change "publishKey = "<PUBNUB_PUBLISH_KEY"" parameter in the "/lambda/index.js" with your newly created application publish_key.
 * Change "subscribeKey = "<PUBNUB_SUBSCRIBE_KEY>"" parameter in the "/lambda/index.js" with your newly created application subscribe_key.
