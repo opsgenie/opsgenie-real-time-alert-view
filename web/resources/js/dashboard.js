@@ -42,7 +42,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
 
     $scope.PubNubInit = function () {
         PubNub.init({
-            subscribe_key: $scope.params.PubNub.SubscribeKey
+            subscribe_key: $scope.params.PubNub.SubscribeKey,
+            ssl: (('https:' == document.location.protocol) ? true : false)
         });
 
         $scope.PubNubSubscribe();
