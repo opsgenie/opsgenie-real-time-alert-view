@@ -1,13 +1,13 @@
 var https = require('https');
 
-var publishKey = "<PUBNUB_PUBLISH_KEY";
+var publishKey = "<PUBNUB_PUBLISH_KEY>";
 var subscribeKey = "<PUBNUB_SUBSCRIBE_KEY>";
 var channelId = "<PUBNUB_CHANNEL>";
 
 var pubnub = {}
-var alertsOPT = {url: "/v1/json/alert", method:'GET'};
-var usersOPT = {url:"/v1/json/user", method: 'GET'};
-var countsOPT = {url:"/v1/json/alert/count", method: 'GET'};
+var alertsOPT = {url: "/v2/alerts", method: 'GET'};
+var usersOPT = {url: "/v2/users", method: 'GET'};
+var countsOPT = {url: "/v2/alerts/count", method: 'GET'};
 
 var timeout = 3000;
 
@@ -25,13 +25,16 @@ function getReqOpts(opt, queryParams) {
     var url = opt.url;
     if (params) {
         url = url + '?' + params;
-    } 
+    }
 
-    return {    
+    return {
         host :  'api.opsgenie.com',
         port : 443,
         path: url,
-        method : opt.method
+        method: opt.method,
+        headers: {
+            'Authorization': 'GenieKey ' + event.apiKey
+        }
     };
 }
 
