@@ -112,15 +112,16 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         var dataObj = {
             lambdaOperation: $scope.params.api.lambda_operations.alerts.operation,
             apiKey: $scope.params.api.key,
-            status: $scope.params.api.lambda_operations.alerts.status,
-            limit: $scope.params.api.lambda_operations.alerts.limit
+            query: "status%3A" + $scope.params.api.lambda_operations.alerts.status,
+            limit: $scope.params.api.lambda_operations.alerts.limit,
+            sort: "createdAt"
         };
 
         var res = $scope.makeApiRequest(dataObj);
 
         res.success(function (data, status, headers, config) {
-            if (angular.isDefined(data.alerts)) {
-                angular.forEach(data.alerts, function (alert, index) {
+            if (angular.isDefined(data.data)) {
+                angular.forEach(data.data, function (alert, index) {
                     $scope.createAlert(alert);
                 });
             } else {
@@ -262,8 +263,8 @@ app.controller('DashboardCtrl', ['$rootScope', '$scope', '$http', 'PubNub', '$in
         alert.tagIndex = 0;
 
         if (angular.isUndefined(notification)) {
-            alert.createdAt = Math.floor(alert.createdAt / 1000000); // TODO WebHook createdAt fix
-            alert.updatedAt = Math.floor(alert.updatedAt / 1000000); // TODO WebHook createdAt fix
+            alert.createdAt = Date.parse(alert.createdAt);
+            alert.updatedAt = Date.parse(alert.updatedAt);
         }
 
         $scope.updateAlertsData(alert);

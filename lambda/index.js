@@ -33,7 +33,7 @@ function getReqOpts(opt, queryParams) {
         path: url,
         method: opt.method,
         headers: {
-            'Authorization': 'GenieKey ' + event.apiKey
+            'Authorization': 'GenieKey ' + queryParams.apiKey
         }
     };
 }
@@ -79,6 +79,9 @@ function publishEventOnPubnub(event, context) {
 }
 
 exports.handler = function(event, context) {
+    if (Object.keys(event).length === 0){
+        context.done();
+    }
     if (event.lambdaOperation && event.apiKey) {
         switch(event.lambdaOperation) {
             case "Alerts":
